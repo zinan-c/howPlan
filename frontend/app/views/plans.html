@@ -1,0 +1,126 @@
+<section class="side-pane">
+  <div style="display:flex; justify-content:space-between; align-items:center;">
+    <h2>出行计划</h2>
+    <div ng-if="vm.isAdmin" style="display:flex; gap:8px;">
+      <button type="button" ng-click="vm.downloadTemplate()">下载 Excel 模版</button>
+      <button type="button" ng-click="vm.openImportModal()">导入 Excel 生成计划</button>
+      <button type="button" ng-click="vm.openCreateModal()">新增计划</button>
+    </div>
+  </div>
+  <div style="display:flex; gap:8px; margin-bottom:10px;">
+    <input type="text"
+           placeholder="搜索计划名称"
+           ng-model="vm.searchText"
+           ng-change="vm.applyFilters()"
+           style="flex:1; padding:6px; border:1px solid #ccd5df;" />
+    <select ng-model="vm.sortOrder" ng-change="vm.applyFilters()" style="padding:6px; border:1px solid #ccd5df;">
+      <option value="dateAsc">开始日期升序</option>
+      <option value="dateDesc">开始日期降序</option>
+    </select>
+  </div>
+  <p class="error" ng-if="vm.error">{{ vm.error }}</p>
+
+  <div class="plans-grid" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:12px;">
+    <div ng-repeat="plan in vm.filteredPlans track by plan.id"
+         ng-click="vm.openPlan(plan)"
+         style="border:1px solid #dde3ec; background:#fff; cursor:pointer;">
+      <img ng-src="{{ plan.coverImage || 'https://via.placeholder.com/640x360?text=Plan' }}"
+           alt="cover"
+           style="width:100%; height:150px; object-fit:cover;" />
+      <div style="padding:10px;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span>
+            <strong>{{ plan.name }}</strong>
+            <span ng-if="plan.isSimple" style="font-size:12px; color:#92400e; background:#ffedd5; padding:2px 6px; margin-left:6px;">草稿</span>
+          </span>
+          <span ng-if="vm.isAdmin" style="display:flex; gap:6px;">
+            <button type="button" ng-click="vm.openEditModal(plan, $event)">✎</button>
+            <button type="button" ng-click="vm.copyPlan(plan, $event)">⧉</button>
+            <button type="button" class="danger" ng-click="vm.deletePlan(plan, $event)">🗑</button>
+          </span>
+        </div>
+        <div>{{ plan.startDate }} ~ {{ plan.endDate }}</div>
+        <div>行程天数：{{ plan.dayCount }} 天</div>
+        <div>停留点：{{ plan.stopCount }} 个</div>
+        <div ng-if="plan.stopCount === 0" style="color:#b45309;">
+          暂无行程点，请编辑添加
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="modal-mask" ng-if="vm.showCreate" ng-click="vm.closeCreateModal()">
+  <div class="modal-card" ng-click="$event.stopPropagation()">
+    <h3>新增计划</h3>
+    <label>名称 <input type="text" ng-model="vm.createForm.name" /></label>
+    <label>开始日期 <input type="date" ng-model="vm.createForm.startDate" /></label>
+    <label>结束日期 <input type="date" ng-model="vm.createForm.endDate" /></label>
+    <label>封面图 URL <input type="text" ng-model="vm.createForm.coverImage" /></label>
+    <button type="button" ng-click="vm.submitCreate()">提交</button>
+    <button type="button" ng-click="vm.closeCreateModal()">取消</button>
+  </div>
+</div>
+
+<div class="modal-mask" ng-if="vm.importModal.show" ng-click="vm.closeImportModal()">
+  <div class="modal-card" ng-click="$event.stopPropagation()">
+    <h3>导入 Excel 生成计划</h3>
+    <p style="margin-top:0; color:#5f6c7b;">支持 .xls/.xlsx，最大 10MB</p>
+
+    <label>计划名称（可选）
+      <input type="text" ng-model="vm.importModal.planName" placeholder="不填则自动生成" />
+    </label>
+
+    <input id="excelImportInput"
+           type="file"
+           accept=".xls,.xlsx"
+           style="display:none"
+           onchange="angular.element(this).scope().vm.onFileInputChange(event)" />
+
+    <div id="excelDropZone"
+         ng-class="{'active': vm.importModal.dragActive}"
+         style="margin-top:10px; border:2px dashed #9bb2d6; padding:16px; text-align:center; background:#f8fbff;">
+      <div>拖拽 Excel 文件到此处</div>
+      <div style="margin:6px 0;">或</div>
+      <button type="button" ng-click="vm.pickExcelFile()">点击选择文件</button>
+      <div ng-if="vm.importModal.fileName" style="margin-top:8px;">已选择：{{ vm.importModal.fileName }}</div>
+    </div>
+
+    <div ng-if="vm.importModal.uploading" style="margin-top:12px;">
+      <div>上传中... {{ vm.importModal.progress }}%</div>
+      <div style="height:8px; background:#e7eef9; margin-top:4px;">
+        <div style="height:8px; background:#2f6fed;" ng-style="{'width': vm.importModal.progress + '%'}"></div>
+      </div>
+    </div>
+
+    <p class="error" ng-if="vm.importModal.error">{{ vm.importModal.error }}</p>
+
+    <div ng-if="vm.importModal.result" style="margin-top:10px;">
+      <div>导入成功：{{ vm.importModal.result.name }}</div>
+      <div ng-if="vm.importModal.warnings.length">
+        <strong>去重警告：</strong>
+        <ul>
+          <li ng-repeat="w in vm.importModal.warnings track by $index">{{ w }}</li>
+        </ul>
+      </div>
+      <button type="button" ng-click="vm.viewImportedPlan()">立即查看</button>
+    </div>
+
+    <div style="margin-top:12px;">
+      <button type="button" ng-click="vm.uploadExcel()" ng-disabled="vm.importModal.uploading">开始上传</button>
+      <button type="button" ng-click="vm.closeImportModal()">关闭</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-mask" ng-if="vm.showEdit" ng-click="vm.closeEditModal()">
+  <div class="modal-card" ng-click="$event.stopPropagation()">
+    <h3>编辑计划</h3>
+    <label>名称 <input type="text" ng-model="vm.editForm.name" /></label>
+    <label>开始日期 <input type="date" ng-model="vm.editForm.startDate" /></label>
+    <label>结束日期 <input type="date" ng-model="vm.editForm.endDate" /></label>
+    <label>封面图 URL <input type="text" ng-model="vm.editForm.coverImage" /></label>
+    <button type="button" ng-click="vm.submitEdit()">保存</button>
+    <button type="button" ng-click="vm.closeEditModal()">取消</button>
+  </div>
+</div>

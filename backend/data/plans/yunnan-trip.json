@@ -1,0 +1,41 @@
+{
+  "id": "yunnan-trip",
+  "name": "云南之旅",
+  "startDate": "2026-04-10",
+  "endDate": "2026-04-16",
+  "coverImage": "https://via.placeholder.com/640x360?text=%E4%BA%91%E5%8D%97%E4%B9%8B%E6%97%85",
+  "dayPlans": [
+    {
+      "dayNumber": 1,
+      "title": "昆明集合",
+      "stops": [
+        {
+          "id": "yn-d1-km",
+          "name": "昆明翠湖",
+          "latitude": 25.0486,
+          "longitude": 102.7046,
+          "activityDescription": "抵达昆明，市区休整。",
+          "imageUrls": [
+            "https://via.placeholder.com/640x360?text=Kunming"
+          ]
+        }
+      ]
+    },
+    {
+      "dayNumber": 2,
+      "title": "大理古城",
+      "stops": [
+        {
+          "id": "yn-d2-dl",
+          "name": "大理古城",
+          "latitude": 25.6927,
+          "longitude": 100.1648,
+          "activityDescription": "古城漫步与洱海骑行。",
+          "imageUrls": [
+            "https://via.placeholder.com/640x360?text=Dali"
+          ]
+        }
+      ]
+    }
+  ]
+}

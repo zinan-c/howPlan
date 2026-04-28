@@ -1,0 +1,40 @@
+<section class="edit-wrap">
+  <section class="edit-panel" ng-if="vm.isAdmin">
+    <h2>Stop Editor</h2>
+    <p>Use Add for new stops. Use Update after loading a stop from map popup.</p>
+    <form ng-submit="vm.submitAdd()">
+      <label>Stop ID (optional for new)
+        <input type="text" ng-model="vm.form.id" />
+      </label>
+      <label>Day Number
+        <input type="number" ng-model="vm.form.dayNumber" min="1" required />
+      </label>
+      <label>Name
+        <input type="text" ng-model="vm.form.name" required />
+      </label>
+      <label>Latitude
+        <input type="number" step="0.000001" ng-model="vm.form.latitude" required />
+      </label>
+      <label>Longitude
+        <input type="number" step="0.000001" ng-model="vm.form.longitude" required />
+      </label>
+      <label>Activity Description
+        <textarea ng-model="vm.form.activityDescription" rows="3"></textarea>
+      </label>
+      <label>Image URLs (comma separated)
+        <input type="text" ng-model="vm.form.imageUrlsText" />
+      </label>
+      <div class="actions">
+        <button type="submit">Add Stop</button>
+        <button type="button" ng-click="vm.submitUpdate()">Update Stop</button>
+      </div>
+    </form>
+    <p class="success" ng-if="vm.success">{{ vm.success }}</p>
+    <p class="error" ng-if="vm.error">{{ vm.error }}</p>
+  </section>
+
+  <section class="edit-panel" ng-if="!vm.isAdmin">
+    <h2>Admin Required</h2>
+    <p>Open this page with <code>?admin=true</code> and backend <code>ADMIN_MODE=true</code>.</p>
+  </section>
+</section>
