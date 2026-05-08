@@ -48,7 +48,7 @@
               var detail = detailRes.data;
               plan.stopCount = countStops(detail.dayPlans || []);
               plan.dayCount = calcDayCount(plan.startDate, plan.endDate);
-              plan.coverImage = plan.coverImage || defaultCover(plan.name);
+              plan.coverImage = resolveCoverImage(plan, detail);
               return plan;
             }).catch(function () {
               plan.stopCount = 0;
@@ -318,6 +318,47 @@
   function defaultCover(name) {
     var q = encodeURIComponent(name || 'travel');
     return 'https://source.unsplash.com/featured/640x360/?' + q + ',travel';
+  }
+
+  function resolveCoverImage(plan, detail) {
+    if (plan.coverImage && plan.coverImage.indexOf('via.placeholder.com') === -1) {
+      return plan.coverImage;
+    }
+    var points = collectCoords(detail && detail.dayPlans);
+    if (!points.length) {
+      return plan.coverImage || defaultCover(plan.name);
+    }
+    var c = centroid(points);
+    var markerList = points.slice(0, 20).map(function (p) {
+      return p.lat.toFixed(5) + ',' + p.lng.toFixed(5) + ',lightblue1';
+    }).join('|');
+    return 'https://staticmap.openstreetmap.de/staticmap.php?center='
+      + c.lat.toFixed(5) + ',' + c.lng.toFixed(5)
+      + '&zoom=7&size=640x360&markers=' + markerList;
+  }
+
+  function collectCoords(dayPlans) {
+    var out = [];
+    (dayPlans || []).forEach(function (day) {
+      (day.stops || []).forEach(function (s) {
+        var lat = Number(s.latitude);
+        var lng = Number(s.longitude);
+        if (!lat && !lng) return;
+        if (!isFinite(lat) || !isFinite(lng)) return;
+        out.push({ lat: lat, lng: lng });
+      });
+    });
+    return out;
+  }
+
+  function centroid(points) {
+    var sumLat = 0;
+    var sumLng = 0;
+    points.forEach(function (p) {
+      sumLat += p.lat;
+      sumLng += p.lng;
+    });
+    return { lat: sumLat / points.length, lng: sumLng / points.length };
   }
 
   function readAdminFlag($window) {

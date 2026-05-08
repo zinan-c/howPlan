@@ -26,6 +26,7 @@
         var dayLines = {};
         var stopMarkers = {};
         var dayBounds = {};
+        var allBounds = [];
         var editMarker = null;
 
         var gaodeNormal = L.tileLayer(
@@ -119,6 +120,7 @@
           if (!trip || !trip.dayPlans || !trip.dayPlans.length) return;
 
           var bounds = [];
+          allBounds = [];
 
           trip.dayPlans.forEach(function (dayPlan) {
             var color = scope.dayColor({ dayNumber: dayPlan.dayNumber });
@@ -131,6 +133,7 @@
               if (!unresolved) {
                 latLngs.push(latLng);
                 bounds.push(latLng);
+                allBounds.push(latLng);
                 dayBounds[dayPlan.dayNumber].push(latLng);
               }
 
@@ -173,6 +176,7 @@
           dayLines = {};
           stopMarkers = {};
           dayBounds = {};
+          allBounds = [];
         }
 
         function updateDayHighlight() {
@@ -195,6 +199,11 @@
           if (request.mode === 'stop' && stopMarkers[request.stopId]) {
             map.setView(stopMarkers[request.stopId].getLatLng(), 14);
             stopMarkers[request.stopId].openPopup();
+            updateDayHighlight();
+            return;
+          }
+          if (request.mode === 'all' && allBounds.length) {
+            map.fitBounds(allBounds, { padding: [24, 24] });
             updateDayHighlight();
           }
         }

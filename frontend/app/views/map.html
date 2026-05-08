@@ -4,9 +4,8 @@
       <a href="#!/plans">所有计划</a> &gt; <span>{{ vm.trip.name }}</span>
     </div>
     <div style="margin: 0 0 8px; display: flex; gap: 8px; align-items: center;">
-      <button type="button" ng-if="vm.isAdmin" ng-click="vm.backToPlans()">返回计划列表</button>
       <button type="button" ng-if="vm.isAdmin" ng-click="vm.openPlanEditModal()">编辑计划基本信息</button>
-      <button type="button" ng-if="vm.isAdmin" ng-click="vm.startFixAll()">修正所有未定位点</button>
+      <button type="button" ng-if="vm.isAdmin && vm.hasUnlocatedStops" ng-click="vm.startFixAll()">修正所有未定位点</button>
       <button type="button" ng-if="vm.isAdmin && vm.trip.isSimple" ng-click="vm.markAsComplete()">标记为完整</button>
       <strong>{{ vm.adminLabel }}</strong>
       <button type="button"
@@ -39,10 +38,31 @@
     <h2>{{ vm.trip.name }}</h2>
     <p>{{ vm.trip.startDate }} ~ {{ vm.trip.endDate }}</p>
     <div class="legend">
-      <h3>Legend</h3>
-      <div class="legend-item" ng-repeat="day in vm.trip.dayPlans track by day.dayNumber">
-        <span class="dot" ng-style="{background: vm.dayColor(day.dayNumber)}"></span>
-        Day {{ day.dayNumber }} - {{ day.title }}
+      <h3>
+        <button type="button" class="legend-title-btn" ng-click="vm.focusAllStops()" title="单击回全局">
+          Legend
+        </button>
+        <button type="button" class="legend-toggle" ng-click="vm.toggleLegend()" aria-label="Toggle legend">
+          <svg class="legend-toggle-icon"
+               ng-class="{collapsed: vm.legendCollapsed}"
+               viewBox="0 0 20 20"
+               width="14"
+               height="14"
+               aria-hidden="true">
+            <path d="M5 8l5 5 5-5" />
+          </svg>
+        </button>
+      </h3>
+      <div class="legend-items" ng-class="{collapsed: vm.legendCollapsed}">
+        <div class="legend-item" ng-repeat="day in vm.trip.dayPlans track by day.dayNumber">
+          <button type="button"
+                  class="legend-link"
+                  ng-click="vm.focusLegendDay(day.dayNumber)"
+                  title="单击聚焦当天">
+            <span class="dot" ng-style="{background: vm.dayColor(day.dayNumber)}"></span>
+            <span>Day {{ day.dayNumber }} - {{ day.title }}</span>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -53,7 +73,7 @@
               type="button"
               ng-click="vm.selectDay(day.dayNumber)">
         <span>Day {{ day.dayNumber }} - {{ day.title }}</span>
-        <span>{{ day.stops.length }} stops</span>
+        <span>{{ vm.stopCountLabel(day.stops.length) }}</span>
       </button>
 
       <ul ng-if="vm.isDayOpen(day.dayNumber)">

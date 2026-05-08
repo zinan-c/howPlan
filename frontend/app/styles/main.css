@@ -52,22 +52,36 @@ body {
 .layout {
   display: grid;
   grid-template-columns: 2fr 1fr;
-  min-height: calc(100vh - 56px);
+  height: calc(100vh - 56px);
+  overflow: hidden;
 }
 
 .map-pane {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
   padding: 8px;
+  overflow: hidden;
+}
+
+.map-pane leaflet-map {
+  display: block;
+  flex: 1;
+  min-height: 0;
 }
 
 .map-canvas {
-  height: calc(100vh - 72px);
+  flex: 1;
+  min-height: 0;
+  height: 100%;
   width: 100%;
   border: 1px solid #c7d3e0;
 }
 
 .side-pane {
+  min-height: 0;
   padding: 12px;
-  overflow: auto;
+  overflow-y: auto;
   background: #fff;
   border-left: 1px solid #dfe7f0;
 }
@@ -81,6 +95,73 @@ body {
 
 .legend h3 {
   margin: 0 0 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.legend-title-btn {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.legend-title-btn:hover {
+  text-decoration: underline;
+}
+
+.legend-toggle {
+  margin: 0;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  border: 1px solid #c8d5e8;
+  background: #fff;
+  color: #1d3557;
+  font-weight: 700;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.legend-toggle-icon {
+  display: block;
+}
+
+.legend-toggle-icon path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.legend-toggle-icon {
+  transform: rotate(180deg);
+  transition: transform 0.24s ease;
+}
+
+.legend-toggle-icon.collapsed {
+  transform: rotate(0deg);
+}
+
+.legend-items {
+  max-height: 1200px;
+  opacity: 1;
+  overflow: hidden;
+  transition: max-height 0.28s ease, opacity 0.22s ease;
+}
+
+.legend-items.collapsed {
+  max-height: 0;
+  opacity: 0;
 }
 
 .legend-item {
@@ -88,6 +169,27 @@ body {
   align-items: center;
   gap: 6px;
   margin-bottom: 4px;
+}
+
+.legend-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+
+.legend-link:hover {
+  text-decoration: underline;
+}
+
+.legend-link .dot {
+  margin-right: 0;
 }
 
 .day-block {
@@ -421,11 +523,16 @@ button.danger {
     margin-left: 0;
   }
   .layout {
+    height: auto;
     grid-template-columns: 1fr;
+    overflow: visible;
+  }
+  .map-pane {
+    overflow: visible;
   }
 
   .map-canvas {
-    height: 56vh;
+    min-height: 56vh;
   }
 }
 

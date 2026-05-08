@@ -61,7 +61,18 @@
       vm.editModal = { show: false, dayNumber: 1, stopId: '', draft: null };
       vm.editDraft = null;
       vm.planModal = { show: false, name: '', startDate: '', endDate: '', coverImage: '' };
+      vm.legendCollapsed = false;
+      vm.hasUnlocatedStops = false;
       vm.dayColor = dayColor;
+      vm.toggleLegend = function () { vm.legendCollapsed = !vm.legendCollapsed; };
+      vm.stopCountLabel = function (count) { return count === 1 ? '1 stop' : count + ' stops'; };
+      vm.focusAllStops = function () {
+        vm.focusRequest = { mode: 'all', tick: Date.now() };
+      };
+      vm.focusLegendDay = function (dayNumber) {
+        vm.selectedDayNumber = dayNumber;
+        vm.focusRequest = { mode: 'day', dayNumber: dayNumber, tick: Date.now() };
+      };
 
       vm.backToPlans = function () {
         $location.path('/plans');
@@ -316,6 +327,7 @@
         vm.error = '';
         TripService.getPlanById(vm.planId).then(function (res) {
           vm.trip = res.data;
+          vm.hasUnlocatedStops = hasUnlocatedStops(vm.trip);
           if (vm.trip.dayPlans && vm.trip.dayPlans.length && !vm.selectedDayNumber) vm.selectedDayNumber = vm.trip.dayPlans[0].dayNumber;
         }).catch(function (err) {
           vm.error = readError(err, 'Failed to load plan data');
@@ -358,6 +370,15 @@
   function dayColor(dayNumber) {
     var colors = ['#e63946', '#1d3557', '#2a9d8f', '#f4a261', '#3a86ff', '#8e44ad'];
     return colors[(dayNumber - 1) % colors.length];
+  }
+
+  function hasUnlocatedStops(trip) {
+    if (!trip || !trip.dayPlans) return false;
+    return trip.dayPlans.some(function (day) {
+      return (day.stops || []).some(function (stop) {
+        return Number(stop.latitude) === 0 && Number(stop.longitude) === 0;
+      });
+    });
   }
 
   function splitImageUrls(text) {
