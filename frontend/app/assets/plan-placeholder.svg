@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-labelledby="title desc">
+  <title id="title">Travel Plan Placeholder</title>
+  <desc id="desc">Default cover image for travel plans</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#e8f1ff"/>
+      <stop offset="100%" stop-color="#d8efe7"/>
+    </linearGradient>
+    <linearGradient id="card" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#f8fbff" stop-opacity="0.95"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="640" height="360" fill="url(#bg)"/>
+  <circle cx="538" cy="68" r="34" fill="#ffd98e" opacity="0.8"/>
+
+  <path d="M0 284 L110 220 L200 262 L286 196 L372 250 L458 176 L560 238 L640 210 L640 360 L0 360 Z" fill="#87b8a0" opacity="0.45"/>
+  <path d="M0 302 L90 246 L178 278 L256 214 L344 266 L430 202 L522 254 L640 228 L640 360 L0 360 Z" fill="#5a8fc7" opacity="0.35"/>
+
+  <g transform="translate(120 78)">
+    <rect x="0" y="0" width="400" height="204" rx="18" fill="url(#card)" stroke="#bfd6ee"/>
+    <path d="M48 150 L128 100 L188 132 L250 82 L332 150" fill="none" stroke="#2d6cdf" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="128" cy="100" r="10" fill="#2d6cdf"/>
+    <circle cx="250" cy="82" r="10" fill="#2d6cdf"/>
+    <path d="M68 54 h64" stroke="#1c3f74" stroke-width="10" stroke-linecap="round"/>
+    <path d="M68 80 h220" stroke="#6c86a8" stroke-width="8" stroke-linecap="round"/>
+    <path d="M68 108 h144" stroke="#8ba0bb" stroke-width="8" stroke-linecap="round"/>
+    <circle cx="346" cy="60" r="20" fill="#e6f0ff" stroke="#bfd6ee"/>
+    <path d="M338 60 l6 6 10-12" fill="none" stroke="#2d6cdf" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <text x="320" y="324" text-anchor="middle" fill="#365d8f" font-size="24" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-weight="700">Travel Plan</text>
+</svg>

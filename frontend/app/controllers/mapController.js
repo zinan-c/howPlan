@@ -84,8 +84,8 @@
         vm.planModal = {
           show: true,
           name: vm.trip.name,
-          startDate: vm.trip.startDate,
-          endDate: vm.trip.endDate,
+          startDate: parseISODate(vm.trip.startDate),
+          endDate: parseISODate(vm.trip.endDate),
           coverImage: vm.trip.coverImage || ''
         };
       };
@@ -98,8 +98,8 @@
         if (!vm.ensureAdmin()) return;
         var nextTrip = angular.copy(vm.trip);
         nextTrip.name = vm.planModal.name;
-        nextTrip.startDate = vm.planModal.startDate;
-        nextTrip.endDate = vm.planModal.endDate;
+        nextTrip.startDate = formatISODate(vm.planModal.startDate) || vm.trip.startDate;
+        nextTrip.endDate = formatISODate(vm.planModal.endDate) || vm.trip.endDate;
         nextTrip.coverImage = vm.planModal.coverImage || '';
         TripService.updatePlan(vm.planId, nextTrip, true).then(function () {
           vm.closePlanEditModal();
@@ -379,6 +379,23 @@
         return Number(stop.latitude) === 0 && Number(stop.longitude) === 0;
       });
     });
+  }
+
+  function parseISODate(value) {
+    if (!value) return null;
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(value));
+    if (!m) return null;
+    return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+  }
+
+  function formatISODate(value) {
+    if (!value) return '';
+    var d = value instanceof Date ? value : new Date(value);
+    if (!d || isNaN(d.getTime())) return '';
+    var y = d.getFullYear();
+    var m = String(d.getMonth() + 1).padStart(2, '0');
+    var day = String(d.getDate()).padStart(2, '0');
+    return y + '-' + m + '-' + day;
   }
 
   function splitImageUrls(text) {
