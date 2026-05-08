@@ -29,6 +29,10 @@
       };
 
       vm.loadAdminStatus = function () {
+        if (readAdminFlag($window)) {
+          vm.isAdmin = true;
+          return;
+        }
         if (isViewerForced($window)) {
           vm.isAdmin = false;
           return;
@@ -318,7 +322,6 @@
   }
 
   function defaultCover(name) {
-    var q = encodeURIComponent(name || 'travel');
     return './app/assets/plan-placeholder.svg';
   }
 
@@ -377,12 +380,27 @@
   }
 
   function readAdminFlag($window) {
-    var p = new URLSearchParams($window.location.search);
-    var enabled = p.get('admin') === 'true';
+    var enabled = readAdminFromURL($window.location);
     if (enabled) {
       clearViewerForce($window);
     }
     return enabled;
+  }
+
+  function readAdminFromURL(loc) {
+    try {
+      var searchParams = new URLSearchParams(loc.search || '');
+      if (searchParams.get('admin') === 'true') return true;
+
+      var hash = String(loc.hash || '');
+      var qIndex = hash.indexOf('?');
+      if (qIndex >= 0) {
+        var hashQuery = hash.slice(qIndex + 1);
+        var hashParams = new URLSearchParams(hashQuery);
+        if (hashParams.get('admin') === 'true') return true;
+      }
+    } catch (e) {}
+    return false;
   }
 
   function isViewerForced($window) {

@@ -28,21 +28,30 @@
           vm.currentPlanName = '';
         }
       };
-      if (isViewerForced($window)) {
-        vm.isAdmin = false;
-      } else {
+      vm.refreshAdminState = function () {
+        if (readAdminFlag($window)) {
+          vm.isAdmin = true;
+          return;
+        }
+        if (isViewerForced($window)) {
+          vm.isAdmin = false;
+          return;
+        }
         TripService.getAdminStatus(readAdminFlag($window)).then(function (res) {
           vm.isAdmin = !!res.data.isAdmin;
         }).catch(function () {
           vm.isAdmin = readAdminFlag($window);
         });
-      }
+      };
+
+      vm.refreshAdminState();
       vm.syncRouteState();
       $rootScope.$on('$routeChangeSuccess', function () {
+        vm.refreshAdminState();
         vm.syncRouteState();
       });
     }])
-    .controller('MapController', ['TripService', '$window', '$routeParams', '$location', function (TripService, $window, $routeParams, $location) {
+    .controller('MapController', ['TripService', '$window', '$routeParams', '$location', '$timeout', function (TripService, $window, $routeParams, $location, $timeout) {
       var vm = this;
       vm.planId = $routeParams.id;
       vm.trip = null;
@@ -70,8 +79,11 @@
         vm.focusRequest = { mode: 'all', tick: Date.now() };
       };
       vm.focusLegendDay = function (dayNumber) {
+        var day = findDay(vm.trip, dayNumber);
         vm.selectedDayNumber = dayNumber;
+        vm.selectedStopId = day && day.stops && day.stops.length ? day.stops[0].id : null;
         vm.focusRequest = { mode: 'day', dayNumber: dayNumber, tick: Date.now() };
+        scrollAgendaToSelection(dayNumber, vm.selectedStopId);
       };
 
       vm.backToPlans = function () {
@@ -309,6 +321,11 @@
       vm.quickDeleteStop = function (dayNumber, stop, $event) { if ($event) $event.stopPropagation(); vm.handleDeleteFromMap({ dayNumber: dayNumber, stop: stop }); };
 
       vm.loadAdminStatus = function () {
+        if (readAdminFlag($window)) {
+          vm.isAdmin = true;
+          vm.adminLabel = '编辑模式(URL)';
+          return;
+        }
         if (isViewerForced($window)) {
           vm.isAdmin = false;
           vm.adminLabel = '浏览模式';
@@ -339,12 +356,27 @@
     }]);
 
   function readAdminFlag($window) {
-    var p = new URLSearchParams($window.location.search);
-    var enabled = p.get('admin') === 'true';
+    var enabled = readAdminFromURL($window.location);
     if (enabled) {
       clearViewerForce($window);
     }
     return enabled;
+  }
+
+  function readAdminFromURL(loc) {
+    try {
+      var searchParams = new URLSearchParams(loc.search || '');
+      if (searchParams.get('admin') === 'true') return true;
+
+      var hash = String(loc.hash || '');
+      var qIndex = hash.indexOf('?');
+      if (qIndex >= 0) {
+        var hashQuery = hash.slice(qIndex + 1);
+        var hashParams = new URLSearchParams(hashQuery);
+        if (hashParams.get('admin') === 'true') return true;
+      }
+    } catch (e) {}
+    return false;
   }
 
   function isViewerForced($window) {
@@ -379,6 +411,34 @@
         return Number(stop.latitude) === 0 && Number(stop.longitude) === 0;
       });
     });
+  }
+
+  function findDay(trip, dayNumber) {
+    var dayPlans = (trip && trip.dayPlans) || [];
+    for (var i = 0; i < dayPlans.length; i++) {
+      if (Number(dayPlans[i].dayNumber) === Number(dayNumber)) return dayPlans[i];
+    }
+    return null;
+  }
+
+  function scrollAgendaToSelection(dayNumber, stopId) {
+    var retries = 8;
+    var attempt = function () {
+      var pane = document.querySelector('.side-pane');
+      var target = null;
+      if (stopId) target = document.getElementById('stop-item-' + stopId);
+      if (!target) target = document.getElementById('day-block-' + dayNumber);
+      if (pane && target) {
+        var paneRect = pane.getBoundingClientRect();
+        var targetRect = target.getBoundingClientRect();
+        var delta = (targetRect.top - paneRect.top) - (pane.clientHeight / 2) + (targetRect.height / 2);
+        pane.scrollTo({ top: pane.scrollTop + delta, behavior: 'smooth' });
+        return;
+      }
+      retries -= 1;
+      if (retries > 0) $timeout(attempt, 70);
+    };
+    $timeout(attempt, 0);
   }
 
   function parseISODate(value) {

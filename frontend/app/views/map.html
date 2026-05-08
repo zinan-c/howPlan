@@ -4,10 +4,10 @@
       <a href="#!/plans">所有计划</a> &gt; <span>{{ vm.trip.name }}</span>
     </div>
     <div style="margin: 0 0 8px; display: flex; gap: 8px; align-items: center;">
+      <strong>{{ vm.adminLabel }}</strong>
       <button type="button" ng-if="vm.isAdmin" ng-click="vm.openPlanEditModal()">编辑计划基本信息</button>
       <button type="button" ng-if="vm.isAdmin && vm.hasUnlocatedStops" ng-click="vm.startFixAll()">修正所有未定位点</button>
       <button type="button" ng-if="vm.isAdmin && vm.trip.isSimple" ng-click="vm.markAsComplete()">标记为完整</button>
-      <strong>{{ vm.adminLabel }}</strong>
       <button type="button"
               ng-if="vm.isAdmin"
               ng-class="{active: vm.addPointMode}"
@@ -68,6 +68,7 @@
 
     <div class="day-block accordion-day"
          ng-repeat="day in vm.trip.dayPlans track by day.dayNumber"
+         id="day-block-{{ day.dayNumber }}"
          ng-class="{active: vm.isDayOpen(day.dayNumber)}">
       <button class="day-toggle"
               type="button"
@@ -78,6 +79,7 @@
 
       <ul ng-if="vm.isDayOpen(day.dayNumber)">
         <li ng-repeat="stop in day.stops track by stop.id"
+            id="stop-item-{{ stop.id }}"
             ng-class="{selected: vm.selectedStopId === stop.id}">
           <div class="stop-row" ng-click="vm.selectStop(day.dayNumber, stop)">
             <strong>{{ stop.name }}</strong>
