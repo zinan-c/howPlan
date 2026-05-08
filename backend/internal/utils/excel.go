@@ -10,14 +10,18 @@ import (
 	"github.com/xuri/excelize/v2"
 )
 
-var TemplateHeaders = []string{"日期", "地点名称", "经度", "纬度", "活动描述"}
+var TemplateHeaders = []string{"日期", "地点名称", "城市/地区(可选)", "国家(可选)", "经度(可选)", "纬度(可选)", "活动描述"}
 
 type ExcelImportRow struct {
-	Date        string
-	Location    string
-	Longitude   float64
-	Latitude    float64
-	Description string
+	Date         string
+	Location     string
+	CityRegion   string
+	Country      string
+	Longitude    float64
+	Latitude     float64
+	HasLongitude bool
+	HasLatitude  bool
+	Description  string
 }
 
 func BuildImportTemplate() ([]byte, error) {
@@ -31,7 +35,7 @@ func BuildImportTemplate() ([]byte, error) {
 		}
 	}
 
-	sample := []interface{}{"2025-04-01", "大理古城", 100.267, 25.693, "逛古城"}
+	sample := []interface{}{"2025-04-01", "大理古城", "大理", "中国", "", "", "逛古城"}
 	for i, v := range sample {
 		cell, _ := excelize.CoordinatesToCellName(i+1, 2)
 		if err := f.SetCellValue(sheet, cell, v); err != nil {
@@ -41,8 +45,9 @@ func BuildImportTemplate() ([]byte, error) {
 
 	_ = f.SetColWidth(sheet, "A", "A", 14)
 	_ = f.SetColWidth(sheet, "B", "B", 18)
-	_ = f.SetColWidth(sheet, "C", "D", 12)
-	_ = f.SetColWidth(sheet, "E", "E", 36)
+	_ = f.SetColWidth(sheet, "C", "D", 14)
+	_ = f.SetColWidth(sheet, "E", "F", 12)
+	_ = f.SetColWidth(sheet, "G", "G", 36)
 
 	buf, err := f.WriteToBuffer()
 	if err != nil {
@@ -77,11 +82,13 @@ func ParseImportExcel(r io.Reader) ([]ExcelImportRow, error) {
 		row := rows[i]
 		date := strings.TrimSpace(safeCell(row, 0))
 		location := strings.TrimSpace(safeCell(row, 1))
-		lonRaw := strings.TrimSpace(safeCell(row, 2))
-		latRaw := strings.TrimSpace(safeCell(row, 3))
-		desc := strings.TrimSpace(safeCell(row, 4))
+		cityRegion := strings.TrimSpace(safeCell(row, 2))
+		country := strings.TrimSpace(safeCell(row, 3))
+		lonRaw := strings.TrimSpace(safeCell(row, 4))
+		latRaw := strings.TrimSpace(safeCell(row, 5))
+		desc := strings.TrimSpace(safeCell(row, 6))
 
-		if date == "" && location == "" && lonRaw == "" && latRaw == "" && desc == "" {
+		if date == "" && location == "" && cityRegion == "" && country == "" && lonRaw == "" && latRaw == "" && desc == "" {
 			continue
 		}
 		if date == "" {
@@ -96,21 +103,28 @@ func ParseImportExcel(r io.Reader) ([]ExcelImportRow, error) {
 			return nil, fmt.Errorf("row %d: 日期格式错误，需 YYYY-MM-DD", rowNum)
 		}
 
-		lon, err := parseOptionalFloat(lonRaw)
+		lon, hasLon, err := parseOptionalFloat(lonRaw)
 		if err != nil {
 			return nil, fmt.Errorf("row %d: 经度格式错误", rowNum)
 		}
-		lat, err := parseOptionalFloat(latRaw)
+		lat, hasLat, err := parseOptionalFloat(latRaw)
 		if err != nil {
 			return nil, fmt.Errorf("row %d: 纬度格式错误", rowNum)
 		}
+		if hasLon != hasLat {
+			return nil, fmt.Errorf("row %d: 经纬度需要同时填写或同时留空", rowNum)
+		}
 
 		out = append(out, ExcelImportRow{
-			Date:        normalizedDate,
-			Location:    location,
-			Longitude:   lon,
-			Latitude:    lat,
-			Description: desc,
+			Date:         normalizedDate,
+			Location:     location,
+			CityRegion:   cityRegion,
+			Country:      country,
+			Longitude:    lon,
+			Latitude:     lat,
+			HasLongitude: hasLon,
+			HasLatitude:  hasLat,
+			Description:  desc,
 		})
 	}
 
@@ -124,11 +138,15 @@ func safeCell(row []string, idx int) string {
 	return ""
 }
 
-func parseOptionalFloat(raw string) (float64, error) {
+func parseOptionalFloat(raw string) (float64, bool, error) {
 	if raw == "" {
-		return 0, nil
+		return 0, false, nil
 	}
-	return strconv.ParseFloat(raw, 64)
+	v, err := strconv.ParseFloat(raw, 64)
+	if err != nil {
+		return 0, false, err
+	}
+	return v, true, nil
 }
 
 func normalizeDate(raw string) (string, error) {

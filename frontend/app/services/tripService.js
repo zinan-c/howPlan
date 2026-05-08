@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('travelPlannerApp').service('TripService', ['$http', function ($http) {
-    var apiBase = 'http://localhost:8080/api';
+    var apiBase = '/api';
     var plansBaseURL = apiBase + '/plans';
 
     this.getAdminStatus = function (adminOverride) {

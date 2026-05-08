@@ -29,6 +29,10 @@
       };
 
       vm.loadAdminStatus = function () {
+        if (isViewerForced($window)) {
+          vm.isAdmin = false;
+          return;
+        }
         TripService.getAdminStatus(readAdminFlag($window)).then(function (res) {
           vm.isAdmin = !!res.data.isAdmin;
         }).catch(function () {
@@ -318,7 +322,25 @@
 
   function readAdminFlag($window) {
     var p = new URLSearchParams($window.location.search);
-    return p.get('admin') === 'true';
+    var enabled = p.get('admin') === 'true';
+    if (enabled) {
+      clearViewerForce($window);
+    }
+    return enabled;
+  }
+
+  function isViewerForced($window) {
+    try {
+      return $window.sessionStorage.getItem('forceViewerMode') === '1';
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function clearViewerForce($window) {
+    try {
+      $window.sessionStorage.removeItem('forceViewerMode');
+    } catch (e) {}
   }
 
   function readError(err, fallback) {

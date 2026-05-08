@@ -35,19 +35,64 @@
             attribution: '&copy; AutoNavi'
           }
         );
+        var gaodeSatellite = L.tileLayer(
+          'https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+          {
+            subdomains: ['1', '2', '3', '4'],
+            attribution: '&copy; AutoNavi'
+          }
+        );
+        var gaodeAnnotation = L.tileLayer(
+          'https://webst0{s}.is.autonavi.com/appmaptile?style=8&x={x}&y={y}&z={z}',
+          {
+            subdomains: ['1', '2', '3', '4'],
+            attribution: '&copy; AutoNavi'
+          }
+        );
         var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           attribution: '&copy; OpenStreetMap contributors'
         });
+        var openTopoMap = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+          maxZoom: 17,
+          attribution: '&copy; OpenTopoMap contributors, &copy; OpenStreetMap contributors'
+        });
+        var cartoLight = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+          attribution: '&copy; CARTO, &copy; OpenStreetMap contributors'
+        });
+        var cartoDark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+          attribution: '&copy; CARTO, &copy; OpenStreetMap contributors'
+        });
+        var esriImagery = L.tileLayer(
+          'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+          {
+            attribution: 'Tiles &copy; Esri'
+          }
+        );
+        var esriTopo = L.tileLayer(
+          'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}',
+          {
+            attribution: 'Tiles &copy; Esri'
+          }
+        );
 
-        gaodeNormal.addTo(map);
+        osm.addTo(map);
         L.control.layers(
           {
-            'Gaode': gaodeNormal,
-            'OpenStreetMap': osm
+            'Gaode Street': gaodeNormal,
+            'Gaode Satellite': gaodeSatellite,
+            'OpenStreetMap': osm,
+            'OpenTopoMap': openTopoMap,
+            'Esri World Imagery': esriImagery,
+            'Esri Topographic': esriTopo,
+            'CARTO Light': cartoLight,
+            'CARTO Dark': cartoDark
           },
-          null,
+          {
+            'Gaode Labels': gaodeAnnotation
+          },
           { position: 'topright' }
         ).addTo(map);
+        L.control.scale({ imperial: false, position: 'bottomright' }).addTo(map);
 
         scope.$watch('trip', function (trip) {
           render(trip);
@@ -113,6 +158,7 @@
 
           if (bounds.length) {
             $timeout(function () {
+              map.invalidateSize();
               map.fitBounds(bounds, { padding: [24, 24] });
             }, 0);
           }

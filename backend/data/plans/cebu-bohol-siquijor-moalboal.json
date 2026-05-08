@@ -1,0 +1,248 @@
+{
+  "id": "cebu-bohol-siquijor-moalboal",
+  "name": "菲律宾中部海岛潜水环线（宿务-薄荷-锡基霍尔-杜马盖地-墨宝）",
+  "startDate": "2026-09-24",
+  "endDate": "2026-10-06",
+  "coverImage": "https://via.placeholder.com/640x360?text=Cebu+Bohol+Siquijor+Moalboal",
+  "isSimple": false,
+  "dayPlans": [
+    {
+      "dayNumber": 1,
+      "title": "Day1 宿务到达与城市补给",
+      "stops": [
+        {
+          "id": "d1-cebu-cathedral",
+          "name": "Cebu Metropolitan Cathedral",
+          "latitude": 10.2932,
+          "longitude": 123.9014,
+          "activityDescription": "到达宿务后轻松城市游：圣婴大教堂、麦哲伦十字架、科隆街、Ayala Center/SM 商场补给。酒店：机场附近酒店（1晚）。",
+          "imageUrls": []
+        }
+      ]
+    },
+    {
+      "dayNumber": 2,
+      "title": "Day2 宿务前往薄荷",
+      "stops": [
+        {
+          "id": "d2-cebu-pier",
+          "name": "Cebu Pier 1",
+          "latitude": 10.2997,
+          "longitude": 123.9054,
+          "activityDescription": "下午/傍晚乘船前往薄荷岛（Tagbilaran）。备注：2pm、3:20、4:20、5:40、6:40 常见班次（以当天为准），航程约2小时。",
+          "imageUrls": []
+        },
+        {
+          "id": "d2-bohol-alona",
+          "name": "Alona Beach",
+          "latitude": 9.5492,
+          "longitude": 123.7680,
+          "activityDescription": "抵达薄荷入住阿罗娜海滩片区酒店（计划4晚）。",
+          "imageUrls": []
+        }
+      ]
+    },
+    {
+      "dayNumber": 3,
+      "title": "Day3 巴里卡萨潜水日",
+      "stops": [
+        {
+          "id": "d3-balicasag",
+          "name": "Balicasag Island",
+          "latitude": 9.5170,
+          "longitude": 123.6854,
+          "activityDescription": "全天潜水：巴里卡萨断层、海龟、杰克鱼风暴、珊瑚密集区等，计划3潜。",
+          "imageUrls": []
+        }
+      ]
+    },
+    {
+      "dayNumber": 4,
+      "title": "Day4 帕米拉坎潜水日",
+      "stops": [
+        {
+          "id": "d4-pamilacan",
+          "name": "Pamilacan Island",
+          "latitude": 9.5320,
+          "longitude": 123.9305,
+          "activityDescription": "全天潜水/海上活动：帕米拉坎岛周边点位。",
+          "imageUrls": []
+        }
+      ]
+    },
+    {
+      "dayNumber": 5,
+      "title": "Day5 薄荷陆地观光",
+      "stops": [
+        {
+          "id": "d5-tarsier",
+          "name": "Philippine Tarsier Sanctuary",
+          "latitude": 9.6930,
+          "longitude": 124.0283,
+          "activityDescription": "上午：眼镜猴保护区、巧克力山。",
+          "imageUrls": []
+        },
+        {
+          "id": "d5-loboc",
+          "name": "Loboc River Cruise",
+          "latitude": 9.6381,
+          "longitude": 124.0337,
+          "activityDescription": "中午：洛博克河竹筏漂流与午餐、传统歌舞。",
+          "imageUrls": []
+        },
+        {
+          "id": "d5-bilar-manmade-forest",
+          "name": "Bilar Man-Made Forest",
+          "latitude": 9.6757,
+          "longitude": 124.1216,
+          "activityDescription": "下午：蜜蜂农场/特色伴手礼等轻松行程。",
+          "imageUrls": []
+        }
+      ]
+    },
+    {
+      "dayNumber": 6,
+      "title": "Day6 薄荷至锡基霍尔",
+      "stops": [
+        {
+          "id": "d6-tagbilaran-port",
+          "name": "Tagbilaran Port",
+          "latitude": 9.6470,
+          "longitude": 123.8559,
+          "activityDescription": "退房后乘船前往锡基霍尔（建议早班船，图中备注约7:30有一班，航程约2小时）。",
+          "imageUrls": []
+        },
+        {
+          "id": "d6-larena-port",
+          "name": "Larena Port",
+          "latitude": 9.2486,
+          "longitude": 123.5884,
+          "activityDescription": "抵达后入住并租摩托；傍晚环岛：百年老榕树、Cambugahay Falls、Lazi Church、Salagdoong Beach 看日落。酒店：锡基霍尔住宿。",
+          "imageUrls": []
+        }
+      ]
+    },
+    {
+      "dayNumber": 7,
+      "title": "Day7 锡基霍尔至杜马盖地",
+      "stops": [
+        {
+          "id": "d7-siquijor-port",
+          "name": "Siquijor Port",
+          "latitude": 9.2148,
+          "longitude": 123.5141,
+          "activityDescription": "上午包车/打车前往码头，乘船到杜马盖地（约30分钟，图中成本约1500PHP为包车段参考）。",
+          "imageUrls": []
+        },
+        {
+          "id": "d7-dumaguete-city",
+          "name": "Dumaguete City",
+          "latitude": 9.3068,
+          "longitude": 123.3054,
+          "activityDescription": "下午可岸潜或自由活动。图中备注潜店可选 Bongo Bongo（夜潜可选）。酒店：杜马盖地潜店住宿（2晚）。",
+          "imageUrls": []
+        }
+      ]
+    },
+    {
+      "dayNumber": 8,
+      "title": "Day8 苏米龙/周边潜水",
+      "stops": [
+        {
+          "id": "d8-sumilon",
+          "name": "Sumilon Island",
+          "latitude": 9.3846,
+          "longitude": 123.3758,
+          "activityDescription": "全天潜水：苏米龙方向或杜马盖地周边船潜点（3潜计划，按潜店当日安排）。",
+          "imageUrls": []
+        }
+      ]
+    },
+    {
+      "dayNumber": 9,
+      "title": "Day9 杜马盖地至奥斯洛布",
+      "stops": [
+        {
+          "id": "d9-apo-island",
+          "name": "Apo Island",
+          "latitude": 9.0747,
+          "longitude": 123.2704,
+          "activityDescription": "上午 Apo 岛潜水，下午回酒店收拾后前往码头，乘船去奥斯洛布（图中备注最晚约8pm有船）。",
+          "imageUrls": []
+        },
+        {
+          "id": "d9-oslob",
+          "name": "Oslob",
+          "latitude": 9.5211,
+          "longitude": 123.4312,
+          "activityDescription": "晚间入住奥斯洛布。",
+          "imageUrls": []
+        }
+      ]
+    },
+    {
+      "dayNumber": 10,
+      "title": "Day10 奥斯洛布与前往墨宝",
+      "stops": [
+        {
+          "id": "d10-whale-shark",
+          "name": "Oslob Whale Shark Watching",
+          "latitude": 9.4637,
+          "longitude": 123.3751,
+          "activityDescription": "上午鲸鲨行程；中午包车前往墨宝。",
+          "imageUrls": []
+        },
+        {
+          "id": "d10-kawasan",
+          "name": "Kawasan Falls",
+          "latitude": 9.8162,
+          "longitude": 123.3748,
+          "activityDescription": "下午 Kawasan 溯溪跳水（约3小时）。酒店建议：Moalboal 潜店附近（2晚）。",
+          "imageUrls": []
+        }
+      ]
+    },
+    {
+      "dayNumber": 11,
+      "title": "Day11 墨宝沙丁鱼风暴",
+      "stops": [
+        {
+          "id": "d11-panagsama",
+          "name": "Panagsama Beach",
+          "latitude": 9.9470,
+          "longitude": 123.3753,
+          "activityDescription": "全天墨宝潜水：沙丁鱼风暴，岸潜/船潜组合。",
+          "imageUrls": []
+        }
+      ]
+    },
+    {
+      "dayNumber": 12,
+      "title": "Day12 墨宝返宿务",
+      "stops": [
+        {
+          "id": "d12-pescador",
+          "name": "Pescador Island",
+          "latitude": 9.8976,
+          "longitude": 123.3431,
+          "activityDescription": "上午 Pescador 岛潜水；晚间包车返回宿务，入住机场附近酒店（1晚，可选市区）。",
+          "imageUrls": []
+        }
+      ]
+    },
+    {
+      "dayNumber": 13,
+      "title": "Day13 宿务返程",
+      "stops": [
+        {
+          "id": "d13-cebu-last-day",
+          "name": "Ayala Center Cebu",
+          "latitude": 10.3173,
+          "longitude": 123.9051,
+          "activityDescription": "返程日：白天可市区再逛（圣婴大教堂、麦哲伦十字架、Ayala/SM）。图中航班参考：17:45飞香港、18:20飞马尼拉、19:20飞香港。",
+          "imageUrls": []
+        }
+      ]
+    }
+  ]
+}

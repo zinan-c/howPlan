@@ -97,66 +97,88 @@
 </div>
 
 <div class="modal-mask" ng-if="vm.addModal.show" ng-click="vm.closeAddModal()">
-  <div class="modal-card" ng-click="$event.stopPropagation()">
+  <div class="modal-card modal-form-card" ng-click="$event.stopPropagation()">
     <h3>添加停留点</h3>
-    <label>Day
-      <input type="number" min="1" ng-model="vm.addModal.dayNumber" />
-    </label>
-    <label>名称
-      <input type="text" ng-model="vm.addModal.name" />
-    </label>
-    <label>活动描述
-      <textarea rows="3" ng-model="vm.addModal.activityDescription"></textarea>
-    </label>
-    <label>图片 URLs (逗号分隔)
-      <input type="text" ng-model="vm.addModal.imageUrlsText" />
-    </label>
-    <label>纬度
-      <input type="number" step="0.000001" ng-model="vm.addModal.latitude" />
-    </label>
-    <label>经度
-      <input type="number" step="0.000001" ng-model="vm.addModal.longitude" />
-    </label>
-    <button type="button" ng-click="vm.submitAddFromMap()" ng-disabled="!vm.isAdmin">提交</button>
-    <button type="button" ng-click="vm.closeAddModal()">取消</button>
+    <p class="form-subtitle">填写基础信息后保存，坐标支持手动微调。</p>
+    <div class="form-grid two-col">
+      <label>所属 Day
+        <input type="number" min="1" ng-model="vm.addModal.dayNumber" />
+      </label>
+      <label>名称
+        <input type="text" ng-model="vm.addModal.name" placeholder="例如：苍山索道站" />
+      </label>
+      <label class="full-row">活动描述
+        <textarea rows="3" ng-model="vm.addModal.activityDescription" placeholder="这段行程的活动安排"></textarea>
+      </label>
+      <label class="full-row">图片 URLs (逗号分隔)
+        <input type="text" ng-model="vm.addModal.imageUrlsText" placeholder="https://... , https://..." />
+      </label>
+      <label>纬度
+        <input type="number" step="0.000001" ng-model="vm.addModal.latitude" />
+      </label>
+      <label>经度
+        <input type="number" step="0.000001" ng-model="vm.addModal.longitude" />
+      </label>
+    </div>
+    <div class="form-actions">
+      <button type="button" class="btn-primary" ng-click="vm.submitAddFromMap()" ng-disabled="!vm.isAdmin">保存停留点</button>
+      <button type="button" class="btn-secondary" ng-click="vm.closeAddModal()">取消</button>
+    </div>
   </div>
 </div>
 
 <div class="modal-mask" ng-if="vm.planModal.show" ng-click="vm.closePlanEditModal()">
-  <div class="modal-card" ng-click="$event.stopPropagation()">
+  <div class="modal-card modal-form-card" ng-click="$event.stopPropagation()">
     <h3>编辑计划基本信息</h3>
-    <label>名称 <input type="text" ng-model="vm.planModal.name" /></label>
-    <label>开始日期 <input type="date" ng-model="vm.planModal.startDate" /></label>
-    <label>结束日期 <input type="date" ng-model="vm.planModal.endDate" /></label>
-    <label>封面图 URL <input type="text" ng-model="vm.planModal.coverImage" /></label>
-    <button type="button" ng-click="vm.submitPlanBasicEdit()" ng-disabled="!vm.isAdmin">保存</button>
-    <button type="button" ng-click="vm.closePlanEditModal()">取消</button>
+    <p class="form-subtitle">更新标题、日期和封面图，保存后立即生效。</p>
+    <div class="form-grid two-col">
+      <label class="full-row">名称
+        <input type="text" ng-model="vm.planModal.name" placeholder="例如：云南春季慢旅行" />
+      </label>
+      <label>开始日期
+        <input type="date" ng-model="vm.planModal.startDate" />
+      </label>
+      <label>结束日期
+        <input type="date" ng-model="vm.planModal.endDate" />
+      </label>
+      <label class="full-row">封面图 URL
+        <input type="text" ng-model="vm.planModal.coverImage" placeholder="https://..." />
+      </label>
+    </div>
+    <div class="form-actions">
+      <button type="button" class="btn-primary" ng-click="vm.submitPlanBasicEdit()" ng-disabled="!vm.isAdmin">保存基本信息</button>
+      <button type="button" class="btn-secondary" ng-click="vm.closePlanEditModal()">取消</button>
+    </div>
   </div>
 </div>
 
 <div class="modal-mask" ng-if="vm.editModal.show" ng-click="vm.closeEditModal()">
-  <div class="modal-card" ng-click="$event.stopPropagation()">
+  <div class="modal-card modal-form-card" ng-click="$event.stopPropagation()">
     <h3>编辑停留点</h3>
-    <p>可直接拖拽地图上的编辑标记修改经纬度。</p>
-    <label>所属 Day
-      <input type="number" min="1" ng-model="vm.editModal.dayNumber" />
-    </label>
-    <label>名称
-      <input type="text" ng-model="vm.editModal.draft.name" />
-    </label>
-    <label>活动描述
-      <textarea rows="3" ng-model="vm.editModal.draft.activityDescription"></textarea>
-    </label>
-    <label>图片 URLs (逗号分隔)
-      <input type="text" ng-model="vm.editModal.draft.imageUrlsText" />
-    </label>
-    <label>纬度
-      <input type="number" step="0.000001" ng-model="vm.editModal.draft.latitude" />
-    </label>
-    <label>经度
-      <input type="number" step="0.000001" ng-model="vm.editModal.draft.longitude" />
-    </label>
-    <button type="button" ng-click="vm.submitEditStop()" ng-disabled="!vm.isAdmin">保存</button>
-    <button type="button" ng-click="vm.closeEditModal()">取消</button>
+    <p class="form-subtitle">可直接拖拽地图上的编辑标记修改经纬度。</p>
+    <div class="form-grid two-col">
+      <label>所属 Day
+        <input type="number" min="1" ng-model="vm.editModal.dayNumber" />
+      </label>
+      <label>名称
+        <input type="text" ng-model="vm.editModal.draft.name" />
+      </label>
+      <label class="full-row">活动描述
+        <textarea rows="3" ng-model="vm.editModal.draft.activityDescription"></textarea>
+      </label>
+      <label class="full-row">图片 URLs (逗号分隔)
+        <input type="text" ng-model="vm.editModal.draft.imageUrlsText" />
+      </label>
+      <label>纬度
+        <input type="number" step="0.000001" ng-model="vm.editModal.draft.latitude" />
+      </label>
+      <label>经度
+        <input type="number" step="0.000001" ng-model="vm.editModal.draft.longitude" />
+      </label>
+    </div>
+    <div class="form-actions">
+      <button type="button" class="btn-primary" ng-click="vm.submitEditStop()" ng-disabled="!vm.isAdmin">保存修改</button>
+      <button type="button" class="btn-secondary" ng-click="vm.closeEditModal()">取消</button>
+    </div>
   </div>
 </div>

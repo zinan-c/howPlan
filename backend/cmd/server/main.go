@@ -29,11 +29,19 @@ func main() {
 	importHandler.Register(mux)
 	mux.Handle("/", http.FileServer(http.Dir("../frontend")))
 
-	addr := ":8080"
+	addr := ":" + getPort()
 	log.Printf("server listening on %s (ADMIN_MODE=%v)", addr, adminMode)
 	if err := http.ListenAndServe(addr, withCORS(mux)); err != nil {
 		log.Fatalf("server failed: %v", err)
 	}
+}
+
+func getPort() string {
+	port := strings.TrimSpace(os.Getenv("PORT"))
+	if port == "" {
+		return "8080"
+	}
+	return port
 }
 
 func withCORS(next http.Handler) http.Handler {

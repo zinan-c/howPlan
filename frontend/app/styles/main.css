@@ -262,15 +262,154 @@ button.danger {
   background: rgba(0, 0, 0, 0.45);
   display: grid;
   place-items: center;
-  z-index: 999;
+  z-index: 10000;
 }
 .modal-card {
+  position: relative;
+  z-index: 10001;
   width: min(640px, 92vw);
   max-height: 80vh;
   overflow: auto;
   background: #fff;
-  padding: 16px;
+  padding: 18px;
   border: 1px solid #dbe3ee;
+  border-radius: 14px;
+  box-shadow: 0 18px 48px rgba(15, 23, 42, 0.24);
+}
+
+/* Keep map controls under modal overlays */
+.leaflet-top,
+.leaflet-bottom,
+.leaflet-control-container {
+  z-index: 800;
+}
+
+.modal-form-card h3 {
+  margin: 0;
+  font-size: 20px;
+  color: #0f2b56;
+}
+
+.form-subtitle {
+  margin: 6px 0 14px;
+  font-size: 13px;
+  color: #5f6c7b;
+}
+
+.form-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.form-grid.two-col {
+  grid-template-columns: 1fr 1fr;
+}
+
+.form-grid label {
+  display: grid;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #344054;
+}
+
+.modal-form-card > label {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #344054;
+}
+
+.form-grid .full-row {
+  grid-column: 1 / -1;
+}
+
+.form-grid input,
+.form-grid textarea,
+.modal-form-card > label input,
+.modal-form-card > label textarea {
+  width: 100%;
+  padding: 10px 11px;
+  border: 1px solid #cfd9e5;
+  border-radius: 10px;
+  background: #fbfdff;
+  font: inherit;
+  color: #111827;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.form-grid input:focus,
+.form-grid textarea:focus,
+.modal-form-card > label input:focus,
+.modal-form-card > label textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.form-actions {
+  margin-top: 16px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.btn-primary,
+.btn-secondary {
+  margin: 0;
+  padding: 9px 14px;
+  border-radius: 10px;
+  font-weight: 700;
+}
+
+.btn-primary {
+  border: 1px solid #145dd8;
+  background: linear-gradient(180deg, #2f7cf8, #1d63de);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  filter: brightness(1.04);
+}
+
+.btn-secondary {
+  border: 1px solid #c7d2e0;
+  background: #f8fafc;
+  color: #1f2937;
+}
+
+.modal-import-card .drop-zone {
+  margin-top: 10px;
+  border: 2px dashed #9bb2d6;
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  background: #f8fbff;
+}
+
+.modal-import-card .drop-zone.active {
+  border-color: #2f6fed;
+  background: #edf4ff;
+}
+
+.upload-progress-wrap {
+  margin-top: 12px;
+}
+
+.upload-progress-bar {
+  height: 8px;
+  background: #e7eef9;
+  border-radius: 999px;
+  margin-top: 4px;
+  overflow: hidden;
+}
+
+.upload-progress-value {
+  height: 8px;
+  background: #2f6fed;
 }
 
 @media (max-width: 900px) {
@@ -293,5 +432,15 @@ button.danger {
 @media (max-width: 640px) {
   .plans-grid {
     grid-template-columns: 1fr !important;
+  }
+  .form-grid.two-col {
+    grid-template-columns: 1fr;
+  }
+  .form-actions {
+    justify-content: stretch;
+  }
+  .form-actions .btn-primary,
+  .form-actions .btn-secondary {
+    flex: 1;
   }
 }

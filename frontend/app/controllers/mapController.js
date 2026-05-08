@@ -11,6 +11,7 @@
       };
       vm.exitAdmin = function () {
         var url = new URL($window.location.href);
+        forceViewerMode($window);
         url.searchParams.delete('admin');
         $window.location.href = url.toString();
       };
@@ -27,11 +28,15 @@
           vm.currentPlanName = '';
         }
       };
-      TripService.getAdminStatus(readAdminFlag($window)).then(function (res) {
-        vm.isAdmin = !!res.data.isAdmin;
-      }).catch(function () {
-        vm.isAdmin = readAdminFlag($window);
-      });
+      if (isViewerForced($window)) {
+        vm.isAdmin = false;
+      } else {
+        TripService.getAdminStatus(readAdminFlag($window)).then(function (res) {
+          vm.isAdmin = !!res.data.isAdmin;
+        }).catch(function () {
+          vm.isAdmin = readAdminFlag($window);
+        });
+      }
       vm.syncRouteState();
       $rootScope.$on('$routeChangeSuccess', function () {
         vm.syncRouteState();
@@ -293,6 +298,11 @@
       vm.quickDeleteStop = function (dayNumber, stop, $event) { if ($event) $event.stopPropagation(); vm.handleDeleteFromMap({ dayNumber: dayNumber, stop: stop }); };
 
       vm.loadAdminStatus = function () {
+        if (isViewerForced($window)) {
+          vm.isAdmin = false;
+          vm.adminLabel = '浏览模式';
+          return;
+        }
         TripService.getAdminStatus(readAdminFlag($window)).then(function (res) {
           vm.isAdmin = !!res.data.isAdmin;
           vm.adminLabel = vm.isAdmin ? '编辑模式' : '浏览模式';
@@ -318,7 +328,31 @@
 
   function readAdminFlag($window) {
     var p = new URLSearchParams($window.location.search);
-    return p.get('admin') === 'true';
+    var enabled = p.get('admin') === 'true';
+    if (enabled) {
+      clearViewerForce($window);
+    }
+    return enabled;
+  }
+
+  function isViewerForced($window) {
+    try {
+      return $window.sessionStorage.getItem('forceViewerMode') === '1';
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function forceViewerMode($window) {
+    try {
+      $window.sessionStorage.setItem('forceViewerMode', '1');
+    } catch (e) {}
+  }
+
+  function clearViewerForce($window) {
+    try {
+      $window.sessionStorage.removeItem('forceViewerMode');
+    } catch (e) {}
   }
 
   function dayColor(dayNumber) {
