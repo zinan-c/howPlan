@@ -1,16 +1,16 @@
 # Travel Planner Viewer (Go + AngularJS + Leaflet)
 
-一个支持多出行计划管理的旅游行程查看与编辑工具。
+A travel itinerary viewer and editor with support for managing multiple trip plans.
 
-当前版本支持：
-- 计划列表与搜索排序
-- 计划详情地图与图层切换
-- 管理员模式下的计划增删改、停留点增删改
-- Excel 导入生成计划（支持地点名自动定位）
+Current features:
+- Plan list with search and sorting
+- Plan detail map with layer switching
+- Plan and stop creation, editing, and deletion in admin mode
+- Excel import for generating plans, including automatic geocoding by place name
 
 ---
 
-## 1. 项目结构
+## 1. Project Structure
 
 ```text
 howPlan/
@@ -30,72 +30,72 @@ howPlan/
 
 ---
 
-## 2. 启动方式（脚本）
+## 2. Starting the App
 
-只需要使用脚本启动，不需要手动执行 `go run`。
+Use the startup script only. You do not need to run `go run` manually.
 
-浏览模式：
+Viewer mode:
 
 ```bash
 ./start.sh
 ```
 
-管理员模式：
+Admin mode:
 
 ```bash
 ./start.sh true
 ```
 
-说明：
-- 启动脚本会在 `18080-19080` 之间自动选择可用随机端口。
-- 启动后会自动用 Chrome 打开页面。
-- 前端和后端同源部署，不需要单独启动前端服务。
+Notes:
+- The startup script automatically chooses an available random port between `18080` and `19080`.
+- After startup, the page opens automatically in Chrome.
+- The frontend and backend are served from the same origin, so there is no separate frontend service to start.
 
 ---
 
-## 3. 管理员模式切换
+## 3. Admin Mode
 
-- 启动时使用 `./start.sh true` 可进入管理员模式。
-- 也可以在 URL 上加 `?admin=true` 临时请求管理员能力（例如：`http://localhost:18xxx/?admin=true#!/plans`）。
+- Start with `./start.sh true` to enable admin mode.
+- You can also add `?admin=true` to the URL to request admin capabilities temporarily, for example: `http://localhost:18xxx/?admin=true#!/plans`.
 
 ---
 
-## 4. 数据文件
+## 4. Data Files
 
-计划数据写入位置：
+Plan data is written to:
 - `backend/data/index.json`
 - `backend/data/plans/*.json`
 
-当前仓库默认包含一份真实行程计划：
+The repository currently includes one real itinerary by default:
 - `cebu-bohol-siquijor-moalboal`
 
 ---
 
-## 5. 常见问题
+## 5. Troubleshooting
 
-### 5.1 端口或权限问题
+### 5.1 Port or Permission Issues
 
-如果启动失败，请检查终端日志。脚本已自动规避常见端口冲突；若系统限制监听端口，请放开终端/安全软件权限。
+If startup fails, check the terminal logs. The script already avoids common port conflicts automatically. If your system blocks port listening, allow the terminal or adjust your security software permissions.
 
-### 5.2 数据写入失败
+### 5.2 Data Write Failures
 
-请确认 `backend/data` 目录对当前用户可写。
+Make sure the current user can write to the `backend/data` directory.
 
-### 5.3 导入定位失败
+### 5.3 Import Geocoding Failures
 
-Excel 导入时，若地点名无法自动解析，会在导入结果中显示 warning，可后续在地图上手动修正坐标。
+During Excel import, any place name that cannot be resolved automatically is shown as a warning in the import result. You can manually correct the coordinates on the map afterward.
 
 ---
 
-## 6. API 概览
+## 6. API Overview
 
 - `GET /api/admin/status`
 - `GET /api/plans`
-- `POST /api/plans`（管理员）
+- `POST /api/plans` (admin)
 - `GET /api/plans/:id`
-- `PUT /api/plans/:id`（管理员）
-- `DELETE /api/plans/:id`（管理员）
-- `POST /api/plans/:id/stops`（管理员）
-- `DELETE /api/plans/:id/stops/:stopId`（管理员）
-- `GET /api/plans/import/template`（管理员）
-- `POST /api/plans/import`（管理员）
+- `PUT /api/plans/:id` (admin)
+- `DELETE /api/plans/:id` (admin)
+- `POST /api/plans/:id/stops` (admin)
+- `DELETE /api/plans/:id/stops/:stopId` (admin)
+- `GET /api/plans/import/template` (admin)
+- `POST /api/plans/import` (admin)
