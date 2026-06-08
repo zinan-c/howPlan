@@ -16,14 +16,14 @@
     <header class="topbar">
       <h1>Travel Plan Viewer</h1>
       <nav class="nav">
-        <a href="#!/plans" ng-class="{active: shell.isPath('/plans')}">所有计划</a>
+        <a href="#!/plans" ng-class="{active: shell.isPath('/plans')}">All Plans</a>
         <span ng-if="shell.currentPlanName" style="color:#dfeaff;">/ {{ shell.currentPlanName }}</span>
       </nav>
       <div class="mode-badge" ng-class="{admin: shell.isAdmin}" ng-if="shell.isAdmin" style="cursor:pointer;" ng-click="shell.exitAdmin()">
-        编辑模式（点击退出）
+        Edit Mode (click to exit)
       </div>
       <div class="mode-badge" ng-if="!shell.isAdmin">
-        浏览模式
+        Viewer Mode
       </div>
     </header>
     <main ng-view></main>

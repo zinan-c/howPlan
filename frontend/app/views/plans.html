@@ -1,21 +1,21 @@
 <section class="side-pane">
   <div style="display:flex; justify-content:space-between; align-items:center;">
-    <h2>出行计划</h2>
+    <h2>Travel Plans</h2>
     <div ng-if="vm.isAdmin" style="display:flex; gap:8px;">
-      <button type="button" ng-click="vm.downloadTemplate()">下载 Excel 模版</button>
-      <button type="button" ng-click="vm.openImportModal()">导入 Excel 生成计划</button>
-      <button type="button" ng-click="vm.openCreateModal()">新增计划</button>
+      <button type="button" ng-click="vm.downloadTemplate()">Download Excel Template</button>
+      <button type="button" ng-click="vm.openImportModal()">Import Excel Plan</button>
+      <button type="button" ng-click="vm.openCreateModal()">New Plan</button>
     </div>
   </div>
   <div style="display:flex; gap:8px; margin-bottom:10px;">
     <input type="text"
-           placeholder="搜索计划名称"
+           placeholder="Search plan names"
            ng-model="vm.searchText"
            ng-change="vm.applyFilters()"
            style="flex:1; padding:6px; border:1px solid #ccd5df;" />
     <select ng-model="vm.sortOrder" ng-change="vm.applyFilters()" style="padding:6px; border:1px solid #ccd5df;">
-      <option value="dateAsc">开始日期升序</option>
-      <option value="dateDesc">开始日期降序</option>
+      <option value="dateAsc">Start date ascending</option>
+      <option value="dateDesc">Start date descending</option>
     </select>
   </div>
   <p class="error" ng-if="vm.error">{{ vm.error }}</p>
@@ -34,7 +34,7 @@
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <span>
             <strong>{{ plan.name }}</strong>
-            <span ng-if="plan.isSimple" style="font-size:12px; color:#92400e; background:#ffedd5; padding:2px 6px; margin-left:6px;">草稿</span>
+            <span ng-if="plan.isSimple" style="font-size:12px; color:#92400e; background:#ffedd5; padding:2px 6px; margin-left:6px;">Draft</span>
           </span>
           <span ng-if="vm.isAdmin" style="display:flex; gap:6px;">
             <button type="button" ng-click="vm.openEditModal(plan, $event)">✎</button>
@@ -43,10 +43,10 @@
           </span>
         </div>
         <div>{{ plan.startDate }} ~ {{ plan.endDate }}</div>
-        <div>行程天数：{{ plan.dayCount }} 天</div>
-        <div>停留点：{{ plan.stopCount }} 个</div>
+        <div>Trip days: {{ plan.dayCount }}</div>
+        <div>Stops: {{ plan.stopCount }}</div>
         <div ng-if="plan.stopCount === 0" style="color:#b45309;">
-          暂无行程点，请编辑添加
+          No itinerary stops yet. Edit the plan to add stops.
         </div>
       </div>
     </div>
@@ -55,36 +55,36 @@
 
 <div class="modal-mask" ng-if="vm.showCreate" ng-click="vm.closeCreateModal()">
   <div class="modal-card modal-form-card" ng-click="$event.stopPropagation()">
-    <h3>新增计划</h3>
-    <p class="form-subtitle">先创建一个基础计划，后续可继续补充行程点。</p>
+    <h3>New Plan</h3>
+    <p class="form-subtitle">Create a basic plan first, then add itinerary stops later.</p>
     <div class="form-grid two-col">
-      <label class="full-row">名称
+      <label class="full-row">Name
         <input type="text" ng-model="vm.createForm.name" />
       </label>
-      <label>开始日期
+      <label>Start Date
         <input type="date" ng-model="vm.createForm.startDate" />
       </label>
-      <label>结束日期
+      <label>End Date
         <input type="date" ng-model="vm.createForm.endDate" />
       </label>
-      <label class="full-row">封面图 URL
+      <label class="full-row">Cover Image URL
         <input type="text" ng-model="vm.createForm.coverImage" />
       </label>
     </div>
     <div class="form-actions">
-      <button type="button" class="btn-primary" ng-click="vm.submitCreate()">创建计划</button>
-      <button type="button" class="btn-secondary" ng-click="vm.closeCreateModal()">取消</button>
+      <button type="button" class="btn-primary" ng-click="vm.submitCreate()">Create Plan</button>
+      <button type="button" class="btn-secondary" ng-click="vm.closeCreateModal()">Cancel</button>
     </div>
   </div>
 </div>
 
 <div class="modal-mask" ng-if="vm.importModal.show" ng-click="vm.closeImportModal()">
   <div class="modal-card modal-form-card modal-import-card" ng-click="$event.stopPropagation()">
-    <h3>导入 Excel 生成计划</h3>
-    <p class="form-subtitle">支持 .xls/.xlsx，最大 10MB</p>
+    <h3>Import Excel Plan</h3>
+    <p class="form-subtitle">Supports .xls/.xlsx files up to 10 MB.</p>
 
-    <label class="full-row">计划名称（可选）
-      <input type="text" ng-model="vm.importModal.planName" placeholder="不填则自动生成" />
+    <label class="full-row">Plan Name (optional)
+      <input type="text" ng-model="vm.importModal.planName" placeholder="Leave blank to generate automatically" />
     </label>
 
     <input id="excelImportInput"
@@ -96,14 +96,14 @@
     <div id="excelDropZone"
          ng-class="{'active': vm.importModal.dragActive}"
          class="drop-zone">
-      <div>拖拽 Excel 文件到此处</div>
-      <div style="margin:6px 0;">或</div>
-      <button type="button" class="btn-secondary" ng-click="vm.pickExcelFile()">点击选择文件</button>
-      <div ng-if="vm.importModal.fileName" style="margin-top:8px;">已选择：{{ vm.importModal.fileName }}</div>
+      <div>Drag an Excel file here</div>
+      <div style="margin:6px 0;">or</div>
+      <button type="button" class="btn-secondary" ng-click="vm.pickExcelFile()">Choose File</button>
+      <div ng-if="vm.importModal.fileName" style="margin-top:8px;">Selected: {{ vm.importModal.fileName }}</div>
     </div>
 
     <div ng-if="vm.importModal.uploading" class="upload-progress-wrap">
-      <div>上传中... {{ vm.importModal.progress }}%</div>
+      <div>Uploading... {{ vm.importModal.progress }}%</div>
       <div class="upload-progress-bar">
         <div class="upload-progress-value" ng-style="{'width': vm.importModal.progress + '%'}"></div>
       </div>
@@ -112,44 +112,44 @@
     <p class="error" ng-if="vm.importModal.error">{{ vm.importModal.error }}</p>
 
     <div ng-if="vm.importModal.result" style="margin-top:10px;">
-      <div>导入成功：{{ vm.importModal.result.name }}</div>
+      <div>Import complete: {{ vm.importModal.result.name }}</div>
       <div ng-if="vm.importModal.warnings.length">
-        <strong>去重警告：</strong>
+        <strong>Duplicate warnings:</strong>
         <ul>
           <li ng-repeat="w in vm.importModal.warnings track by $index">{{ w }}</li>
         </ul>
       </div>
-      <button type="button" ng-click="vm.viewImportedPlan()">立即查看</button>
+      <button type="button" ng-click="vm.viewImportedPlan()">View Now</button>
     </div>
 
     <div class="form-actions">
-      <button type="button" class="btn-primary" ng-click="vm.uploadExcel()" ng-disabled="vm.importModal.uploading">开始上传</button>
-      <button type="button" class="btn-secondary" ng-click="vm.closeImportModal()">关闭</button>
+      <button type="button" class="btn-primary" ng-click="vm.uploadExcel()" ng-disabled="vm.importModal.uploading">Start Upload</button>
+      <button type="button" class="btn-secondary" ng-click="vm.closeImportModal()">Close</button>
     </div>
   </div>
 </div>
 
 <div class="modal-mask" ng-if="vm.showEdit" ng-click="vm.closeEditModal()">
   <div class="modal-card modal-form-card" ng-click="$event.stopPropagation()">
-    <h3>编辑计划</h3>
-    <p class="form-subtitle">修改后将覆盖当前计划基础信息。</p>
+    <h3>Edit Plan</h3>
+    <p class="form-subtitle">Changes overwrite the current plan's basic information.</p>
     <div class="form-grid two-col">
-      <label class="full-row">名称
+      <label class="full-row">Name
         <input type="text" ng-model="vm.editForm.name" />
       </label>
-      <label>开始日期
+      <label>Start Date
         <input type="date" ng-model="vm.editForm.startDate" />
       </label>
-      <label>结束日期
+      <label>End Date
         <input type="date" ng-model="vm.editForm.endDate" />
       </label>
-      <label class="full-row">封面图 URL
+      <label class="full-row">Cover Image URL
         <input type="text" ng-model="vm.editForm.coverImage" />
       </label>
     </div>
     <div class="form-actions">
-      <button type="button" class="btn-primary" ng-click="vm.submitEdit()">保存修改</button>
-      <button type="button" class="btn-secondary" ng-click="vm.closeEditModal()">取消</button>
+      <button type="button" class="btn-primary" ng-click="vm.submitEdit()">Save Changes</button>
+      <button type="button" class="btn-secondary" ng-click="vm.closeEditModal()">Cancel</button>
     </div>
   </div>
 </div>

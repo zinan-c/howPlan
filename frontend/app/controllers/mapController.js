@@ -123,7 +123,7 @@
 
       vm.ensureAdmin = function () {
         if (vm.isAdmin) return true;
-        $window.alert('当前不是管理员模式，写操作已禁用。');
+        $window.alert('Write actions are disabled because admin mode is not active.');
         return false;
       };
 
@@ -177,7 +177,7 @@
           });
         });
         if (!queue.length) {
-          $window.alert('没有未定位点。');
+          $window.alert('There are no unlocated stops.');
           return;
         }
         vm.addPointMode = false;
@@ -212,7 +212,7 @@
           }
           vm.loadTrip();
         }).catch(function (err) {
-          vm.error = readError(err, '修正坐标失败');
+          vm.error = readError(err, 'Failed to fix coordinates');
         });
       };
 
@@ -223,7 +223,7 @@
         TripService.updatePlan(vm.planId, nextTrip, true).then(function () {
           vm.loadTrip();
         }).catch(function (err) {
-          vm.error = readError(err, '标记失败');
+          vm.error = readError(err, 'Failed to mark the plan complete');
         });
       };
 
@@ -323,20 +323,20 @@
       vm.loadAdminStatus = function () {
         if (readAdminFlag($window)) {
           vm.isAdmin = true;
-          vm.adminLabel = '编辑模式(URL)';
+          vm.adminLabel = 'Edit Mode (URL)';
           return;
         }
         if (isViewerForced($window)) {
           vm.isAdmin = false;
-          vm.adminLabel = '浏览模式';
+          vm.adminLabel = 'Viewer Mode';
           return;
         }
         TripService.getAdminStatus(readAdminFlag($window)).then(function (res) {
           vm.isAdmin = !!res.data.isAdmin;
-          vm.adminLabel = vm.isAdmin ? '编辑模式' : '浏览模式';
+          vm.adminLabel = vm.isAdmin ? 'Edit Mode' : 'Viewer Mode';
         }).catch(function () {
           vm.isAdmin = readAdminFlag($window);
-          vm.adminLabel = vm.isAdmin ? '编辑模式(URL)' : '浏览模式';
+          vm.adminLabel = vm.isAdmin ? 'Edit Mode (URL)' : 'Viewer Mode';
         });
       };
 

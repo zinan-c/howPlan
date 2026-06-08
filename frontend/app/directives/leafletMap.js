@@ -244,8 +244,8 @@
           if (isAdmin) {
             html += ''
               + '<div class="popup-actions">'
-              + '<button type="button" class="popup-edit" data-stop-id="' + escapeHtml(stop.id) + '" data-day="' + dayNumber + '">编辑</button>'
-              + '<button type="button" class="popup-delete" data-stop-id="' + escapeHtml(stop.id) + '">删除</button>'
+              + '<button type="button" class="popup-edit" data-stop-id="' + escapeHtml(stop.id) + '" data-day="' + dayNumber + '">Edit</button>'
+              + '<button type="button" class="popup-delete" data-stop-id="' + escapeHtml(stop.id) + '">Delete</button>'
               + '</div>';
           }
 

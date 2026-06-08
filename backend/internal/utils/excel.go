@@ -10,7 +10,7 @@ import (
 	"github.com/xuri/excelize/v2"
 )
 
-var TemplateHeaders = []string{"日期", "地点名称", "城市/地区(可选)", "国家(可选)", "经度(可选)", "纬度(可选)", "活动描述"}
+var TemplateHeaders = []string{"Date", "Place Name", "City/Region (optional)", "Country (optional)", "Longitude (optional)", "Latitude (optional)", "Activity Description"}
 
 type ExcelImportRow struct {
 	Date         string
@@ -35,7 +35,7 @@ func BuildImportTemplate() ([]byte, error) {
 		}
 	}
 
-	sample := []interface{}{"2025-04-01", "大理古城", "大理", "中国", "", "", "逛古城"}
+	sample := []interface{}{"2025-04-01", "Alona Beach", "Bohol", "Philippines", "", "", "Beach walk and dinner"}
 	for i, v := range sample {
 		cell, _ := excelize.CoordinatesToCellName(i+1, 2)
 		if err := f.SetCellValue(sheet, cell, v); err != nil {
@@ -92,27 +92,27 @@ func ParseImportExcel(r io.Reader) ([]ExcelImportRow, error) {
 			continue
 		}
 		if date == "" {
-			return nil, fmt.Errorf("row %d: 日期不能为空", rowNum)
+			return nil, fmt.Errorf("row %d: date is required", rowNum)
 		}
 		if location == "" {
-			return nil, fmt.Errorf("row %d: 地点名称不能为空", rowNum)
+			return nil, fmt.Errorf("row %d: place name is required", rowNum)
 		}
 
 		normalizedDate, err := normalizeDate(date)
 		if err != nil {
-			return nil, fmt.Errorf("row %d: 日期格式错误，需 YYYY-MM-DD", rowNum)
+			return nil, fmt.Errorf("row %d: invalid date format, expected YYYY-MM-DD", rowNum)
 		}
 
 		lon, hasLon, err := parseOptionalFloat(lonRaw)
 		if err != nil {
-			return nil, fmt.Errorf("row %d: 经度格式错误", rowNum)
+			return nil, fmt.Errorf("row %d: invalid longitude format", rowNum)
 		}
 		lat, hasLat, err := parseOptionalFloat(latRaw)
 		if err != nil {
-			return nil, fmt.Errorf("row %d: 纬度格式错误", rowNum)
+			return nil, fmt.Errorf("row %d: invalid latitude format", rowNum)
 		}
 		if hasLon != hasLat {
-			return nil, fmt.Errorf("row %d: 经纬度需要同时填写或同时留空", rowNum)
+			return nil, fmt.Errorf("row %d: longitude and latitude must both be filled or both be blank", rowNum)
 		}
 
 		out = append(out, ExcelImportRow{

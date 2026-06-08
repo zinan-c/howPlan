@@ -161,7 +161,7 @@
         TripService.getPlanById(plan.id).then(function (res) {
           var src = res.data;
           var payload = {
-            name: src.name + '（副本）',
+            name: src.name + ' (Copy)',
             startDate: src.startDate,
             endDate: src.endDate,
             coverImage: src.coverImage || defaultCover(src.name),
@@ -230,7 +230,7 @@
         if (!vm.isAdmin) return;
         vm.importModal.error = '';
         if (!vm.importModal.file) {
-          vm.importModal.error = '请先选择 Excel 文件';
+          vm.importModal.error = 'Please choose an Excel file first';
           return;
         }
         vm.importModal.uploading = true;
@@ -248,7 +248,7 @@
         ).then(function (res) {
           vm.handleImportSuccess(res.data);
         }).catch(function (err) {
-          vm.importModal.error = readError(err, '导入失败');
+          vm.importModal.error = readError(err, 'Import failed');
         }).finally(function () {
           vm.importModal.uploading = false;
           if (vm.importModal.progress < 100 && !vm.importModal.error) vm.importModal.progress = 100;
@@ -423,13 +423,13 @@
   }
 
   function validateExcelFile(file) {
-    if (!file) return '请选择文件';
+    if (!file) return 'Please choose a file';
     var maxBytes = 10 * 1024 * 1024;
-    if (file.size > maxBytes) return '文件过大，最大 10MB';
+    if (file.size > maxBytes) return 'File is too large. Maximum size is 10 MB';
 
     var name = (file.name || '').toLowerCase();
     if (!(name.endsWith('.xls') || name.endsWith('.xlsx'))) {
-      return '仅支持 .xls 或 .xlsx 文件';
+      return 'Only .xls or .xlsx files are supported';
     }
     return '';
   }

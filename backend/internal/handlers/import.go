@@ -69,7 +69,7 @@ func (h *ImportHandler) ImportPlan(w http.ResponseWriter, r *http.Request) {
 
 	planName := strings.TrimSpace(r.FormValue("planName"))
 	if planName == "" {
-		planName = "导入计划_" + time.Now().Format("20060102_150405")
+		planName = "Imported Plan " + time.Now().Format("20060102_150405")
 	}
 
 	type groupedRow struct {
@@ -81,7 +81,7 @@ func (h *ImportHandler) ImportPlan(w http.ResponseWriter, r *http.Request) {
 
 	for _, row := range rows {
 		if h.isDuplicateStop("", row.Date, row.Location) {
-			warnings = append(warnings, fmt.Sprintf("跳过重复点：%s %s", row.Date, row.Location))
+			warnings = append(warnings, fmt.Sprintf("Skipped duplicate stop: %s %s", row.Date, row.Location))
 			continue
 		}
 		groups[row.Date] = append(groups[row.Date], row)
@@ -119,7 +119,7 @@ func (h *ImportHandler) ImportPlan(w http.ResponseWriter, r *http.Request) {
 
 				resolvedLat, resolvedLng, geoErr := utils.GeocodeLocation(geocodeQuery)
 				if geoErr != nil {
-					warnings = append(warnings, fmt.Sprintf("地点未能自动定位：%s（查询词：%s，%v）", row.Location, geocodeQuery, geoErr))
+					warnings = append(warnings, fmt.Sprintf("Could not geocode location: %s (query: %s, %v)", row.Location, geocodeQuery, geoErr))
 				} else {
 					lat = resolvedLat
 					lng = resolvedLng
